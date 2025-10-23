@@ -22,6 +22,18 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { Bug } from "lucide-react";
 
 function App() {
   return (
@@ -59,7 +71,12 @@ function App() {
         css-test
       </div>
       <Dialog>
-        <DialogTrigger>Open</DialogTrigger>
+        <DialogTrigger asChild>
+          <div className="m-20 flex h-20 w-20 flex-col items-center justify-center space-y-2 bg-gray-500">
+            <div className="text-lg text-white">Open</div>
+            <Bug className="h-10 w-10 fill-blue-600" />
+          </div>
+        </DialogTrigger>
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Are you absolutely sure?</DialogTitle>
@@ -70,6 +87,28 @@ function App() {
           </DialogHeader>
         </DialogContent>
       </Dialog>
+      <AlertDialog>
+        <AlertDialogTrigger asChild>
+          <Bug className="h-10 w-10 fill-green-600" />
+        </AlertDialogTrigger>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This action cannot be undone. This will permanently delete your
+              account and remove your data from our servers.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={() => console.log("no")}>
+              Cancel
+            </AlertDialogCancel>
+            <AlertDialogAction onClick={() => console.log("ok")}>
+              Continue
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </>
   );
 }
