@@ -9,6 +9,11 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 
 function App() {
   return (
@@ -21,6 +26,12 @@ function App() {
       >
         shadcn-button-init
       </Button>
+      <Popover>
+        <PopoverTrigger asChild>
+          <Button>Open</Button>
+        </PopoverTrigger>
+        <PopoverContent>Place content for the popover here.</PopoverContent>
+      </Popover>
       <Carousel className="m-20">
         <CarouselContent>
           <CarouselItem className="basis-1/2 bg-rose-100">
