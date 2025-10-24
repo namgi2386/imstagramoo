@@ -1,22 +1,25 @@
 // src/store/count.ts
 import { create } from "zustand";
 import { combine } from "zustand/middleware";
+import { immer } from "zustand/middleware/immer";
 
 export const useCountStore = create(
-  combine({ count: 0 }, (set, get) => ({
-    actions: {
-      increase: () => {
-        set((store) => ({
-          count: store.count + 1,
-        }));
+  immer(
+    combine({ count: 0 }, (set, get) => ({
+      actions: {
+        increase: () => {
+          set((store) => {
+            store.count += 1;
+          });
+        },
+        decrease: () => {
+          set((store) => {
+            store.count -= 1;
+          });
+        },
       },
-      decrease: () => {
-        set((store) => ({
-          count: store.count - 1,
-        }));
-      },
-    },
-  })),
+    })),
+  ),
 );
 
 export const useCount = () => {
