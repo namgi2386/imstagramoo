@@ -8,39 +8,35 @@ export function useUpdateTodoMutation() {
   return useMutation({
     mutationFn: updateTodo,
     onMutate: async (updatedTodo) => {
+
       // 조회 취소
       await queryClient.cancelQueries({
-        queryKey: QUERY_KEYS.todo.list,
+        queryKey: QUERY_KEYS.todo.detail(updatedTodo.id),
       });
       // 낙관적 업데이트
-      const prevTodos = queryClient.getQueryData<Todo[]>(QUERY_KEYS.todo.list);
-      queryClient.setQueryData<Todo[]>(QUERY_KEYS.todo.list, (prevTodos) => {
-        if (!prevTodos) return [];
-        return prevTodos.map((prevTodo) =>
-          prevTodo.id === updatedTodo.id
-            ? { ...prevTodo, ...updatedTodo }
-            : prevTodo,
-        );
-      });
+      const prevTodo = queryClient.getQueryData<Todo>(
+        QUERY_KEYS.todo.detail(updatedTodo.id)
+      )
+      queryClient.setQueryData<Todo>(QUERY_KEYS.todo.detail(updatedTodo.id),(prevTodo) => {
+        if(!prevTodo) return ;
+        return {
+          ...prevTodo,
+          ...updatedTodo
+        }
+      } );
       return {
-        prevTodos,
-      };
+        prevTodo
+      }
     },
     // context: onMutate반환값
     onError: (error, variable, context) => {
       // 캐시데이터 되돌리기
-      if (context && context.prevTodos) {
-        queryClient.setQueryData<Todo[]>(
-          QUERY_KEYS.todo.list,
-          context.prevTodos,
-        );
+      if(context && context.prevTodo){
+        queryClient.setQueryData<Todo>(
+          QUERY_KEYS.todo.detail(context.prevTodo.id),
+          context.prevTodo
+        )
       }
-    },
-    // 완료 후 쿼리상태 검증
-    onSettled: () => {
-      queryClient.invalidateQueries({
-        queryKey: QUERY_KEYS.todo.list,
-      });
     },
   });
 }
